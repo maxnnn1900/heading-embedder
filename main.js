@@ -1,17 +1,16 @@
 
 const { Plugin, SuggestModal, Modal, Notice, MarkdownView } = require('obsidian');
 
-// Главный класс плагина
+/**
+ * Главный класс плагина для вставки заголовков из других заметок.
+ */
 module.exports = class HeadingEmbedderPlugin extends Plugin {
     async onload() {
         this.addRibbonIcon("link", "Embed Headings", () => {
             const activeFile = this.app.workspace.getActiveFile();
             new FileSuggestModal(this.app, activeFile, async (file) => {
                 const content = await this.app.vault.read(file);
-                const headings = Array.from(content.matchAll(/^(#{1,6})\s+(.+)/gm)).map(m => ({
-                    level: m[1].length,
-                    text: m[2].trim()
-                }));
+                const headings = parseHeadings(content);
 
                 if (headings.length === 0) {
                     new Notice("Заголовки не найдены.");
@@ -36,7 +35,9 @@ module.exports = class HeadingEmbedderPlugin extends Plugin {
     }
 };
 
-// Модальное окно для выбора файла с заголовками
+/**
+ * Модальное окно для выбора файла с заголовками.
+ */
 class FileSuggestModal extends SuggestModal {
     constructor(app, skipFile, onChoose) {
         super(app);
@@ -60,7 +61,9 @@ class FileSuggestModal extends SuggestModal {
     }
 }
 
-// Модальное окно для выбора заголовков
+/**
+ * Модальное окно для выбора заголовков из выбранного файла.
+ */
 class HeadingSelectModal extends Modal {
     constructor(app, headings, file, onInsert) {
         super(app);
@@ -93,12 +96,23 @@ class HeadingSelectModal extends Modal {
         };
 
         selectAllCheckbox.onchange = () => {
+            // Снимаем выбор со всех чекбоксов
             this.checkboxRefs.forEach((checkbox, text) => {
-                checkbox.checked = selectAllCheckbox.checked;
+                checkbox.checked = false;
                 checkbox.disabled = false;
-                if (checkbox.checked) this.selected.add(text);
-                else this.selected.delete(text);
+                this.selected.delete(text);
             });
+
+            if (selectAllCheckbox.checked) {
+                // Выбираем только заголовки верхнего уровня
+                this.headings.forEach(({ text, top }, index) => {
+                    if (top) {
+                        const cb = this.checkboxRefs.get(text);
+                        cb.checked = true;
+                        cb.dispatchEvent(new Event("change"));
+                    }
+                });
+            }
         };
 
         // Заголовки
@@ -163,4 +177,23 @@ class HeadingSelectModal extends Modal {
         this.contentEl.removeClass("heading-modal");
         this.contentEl.empty();
     }
+}
+
+/**
+ * Разбирает содержимое Markdown на заголовки и отмечает верхний уровень.
+ * @param {string} content Содержимое файла
+ * @returns {Array<{level:number,text:string,top:boolean}>}
+ */
+function parseHeadings(content) {
+    const matches = Array.from(content.matchAll(/^(#{1,6})\s+(.+)/gm));
+    const headings = [];
+    let minLevel = Infinity;
+    for (const m of matches) {
+        const level = m[1].length;
+        const text = m[2].trim();
+        const top = level <= minLevel;
+        if (top) minLevel = level;
+        headings.push({ level, text, top });
+    }
+    return headings;
 }
