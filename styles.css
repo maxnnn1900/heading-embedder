@@ -1,18 +1,58 @@
 
+.heading-modal {
+  padding: 16px;
+  background-color: var(--background-primary);
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  max-height: 70vh;
+  overflow-y: auto;
+}
+
 .heading-line {
   display: flex;
   align-items: center;
   gap: 8px;
   margin: 6px 0;
   font-size: 14px;
+  padding: 4px 8px;
+  border-radius: 4px;
+  transition: background-color 0.2s ease;
+}
+
+.heading-line:hover {
+  background-color: var(--background-modifier-hover);
 }
 
 .heading-line input[type="checkbox"] {
-  transform: scale(1.2);
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  border: 2px solid var(--text-faint);
+  border-radius: 3px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--background-secondary);
   cursor: pointer;
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+.heading-line input[type="checkbox"]:checked {
+  background-color: var(--interactive-accent);
+  border-color: var(--interactive-accent);
+}
+
+.heading-line input[type="checkbox"]:checked::after {
+  content: "";
+  width: 6px;
+  height: 10px;
+  border: solid var(--text-on-accent);
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
 }
 
 .heading-line .label {
+  flex-grow: 1;
   cursor: pointer;
 }
 
@@ -25,4 +65,9 @@
   background-color: var(--interactive-accent);
   color: var(--text-on-accent);
   cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.add-button:hover {
+  background-color: var(--interactive-accent-hover);
 }
