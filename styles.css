@@ -1,0 +1,28 @@
+
+.heading-line {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 6px 0;
+  font-size: 14px;
+}
+
+.heading-line input[type="checkbox"] {
+  transform: scale(1.2);
+  cursor: pointer;
+}
+
+.heading-line .label {
+  cursor: pointer;
+}
+
+.add-button {
+  margin-top: 16px;
+  padding: 8px 16px;
+  font-size: 14px;
+  border: none;
+  border-radius: 6px;
+  background-color: var(--interactive-accent);
+  color: var(--text-on-accent);
+  cursor: pointer;
+}
