@@ -38,6 +38,10 @@
   cursor: not-allowed;
 }
 
+.heading-line.disabled .label {
+  text-decoration: line-through;
+}
+
 .heading-line.disabled input[type="checkbox"] {
   cursor: not-allowed;
 }
@@ -95,4 +99,13 @@
   border-bottom: 1px solid var(--background-modifier-border);
   padding-bottom: 4px;
   margin-bottom: 4px;
+}
+
+.select-all .label {
+  color: var(--interactive-accent);
+  font-weight: bold;
+}
+
+.select-all .checkbox {
+  border-color: var(--interactive-accent);
 }
