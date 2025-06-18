@@ -5,7 +5,13 @@
   border-radius: 8px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
   max-height: 70vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.heading-list {
   overflow-y: auto;
+  flex: 1;
 }
 
 .heading-line {
@@ -30,6 +36,10 @@
 .heading-line.disabled {
   color: var(--text-faint);
   cursor: not-allowed;
+}
+
+.heading-line.disabled .label {
+  text-decoration: line-through;
 }
 
 .heading-line.disabled input[type="checkbox"] {
@@ -83,4 +93,19 @@
 
 .add-button:hover {
   background-color: var(--interactive-accent-hover);
+}
+
+.select-all {
+  border-bottom: 1px solid var(--background-modifier-border);
+  padding-bottom: 4px;
+  margin-bottom: 4px;
+}
+
+.select-all .label {
+  color: var(--interactive-accent);
+  font-weight: bold;
+}
+
+.select-all .checkbox {
+  border-color: var(--interactive-accent);
 }
