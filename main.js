@@ -1,6 +1,7 @@
 
 const { Plugin, SuggestModal, Modal, Notice, MarkdownView } = require('obsidian');
 
+// Главный класс плагина
 module.exports = class HeadingEmbedderPlugin extends Plugin {
     async onload() {
         this.addRibbonIcon("link", "Embed Headings", () => {
@@ -35,6 +36,7 @@ module.exports = class HeadingEmbedderPlugin extends Plugin {
     }
 };
 
+// Модальное окно для выбора файла с заголовками
 class FileSuggestModal extends SuggestModal {
     constructor(app, skipFile, onChoose) {
         super(app);
@@ -58,6 +60,7 @@ class FileSuggestModal extends SuggestModal {
     }
 }
 
+// Модальное окно для выбора заголовков
 class HeadingSelectModal extends Modal {
     constructor(app, headings, file, onInsert) {
         super(app);
@@ -72,6 +75,7 @@ class HeadingSelectModal extends Modal {
     onOpen() {
         const { contentEl } = this;
         contentEl.empty();
+        contentEl.addClass("heading-modal");
         contentEl.createEl("h2", { text: "Выберите заголовки:" });
 
         // "Выбрать все"
@@ -156,6 +160,7 @@ class HeadingSelectModal extends Modal {
     }
 
     onClose() {
+        this.contentEl.removeClass("heading-modal");
         this.contentEl.empty();
     }
 }
