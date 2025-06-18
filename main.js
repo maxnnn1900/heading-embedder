@@ -73,6 +73,7 @@ class HeadingSelectModal extends Modal {
         this.onInsert = onInsert;
         this.checkboxRefs = new Map(); // text => checkbox
         this.levelMap = new Map();     // text => level
+        this.containerRefs = new Map(); // text => container
     }
 
     onOpen() {
@@ -101,6 +102,8 @@ class HeadingSelectModal extends Modal {
                 checkbox.checked = false;
                 checkbox.disabled = false;
                 this.selected.delete(text);
+                const cont = this.containerRefs.get(text);
+                cont.classList.remove("selected", "disabled");
             });
 
             if (selectAllCheckbox.checked) {
@@ -128,6 +131,7 @@ class HeadingSelectModal extends Modal {
 
             this.checkboxRefs.set(text, checkbox);
             this.levelMap.set(text, level);
+            this.containerRefs.set(text, container);
 
             label.onclick = () => {
                 checkbox.checked = !checkbox.checked;
@@ -137,13 +141,17 @@ class HeadingSelectModal extends Modal {
             checkbox.onchange = () => {
                 if (checkbox.checked) {
                     this.selected.add(text);
+                    container.classList.add("selected");
                     // disable all children
                     for (let i = index + 1; i < this.headings.length; i++) {
                         const next = this.headings[i];
                         if (next.level > level) {
                             const cb = this.checkboxRefs.get(next.text);
+                            const cont = this.containerRefs.get(next.text);
                             cb.disabled = true;
                             cb.checked = false;
+                            cont.classList.add("disabled");
+                            cont.classList.remove("selected");
                             this.selected.delete(next.text);
                         } else {
                             break;
@@ -151,12 +159,15 @@ class HeadingSelectModal extends Modal {
                     }
                 } else {
                     this.selected.delete(text);
+                    container.classList.remove("selected");
                     // enable all children
                     for (let i = index + 1; i < this.headings.length; i++) {
                         const next = this.headings[i];
                         if (next.level > level) {
                             const cb = this.checkboxRefs.get(next.text);
+                            const cont = this.containerRefs.get(next.text);
                             cb.disabled = false;
+                            cont.classList.remove("disabled");
                         } else {
                             break;
                         }

@@ -23,6 +23,19 @@
   background-color: var(--background-modifier-hover);
 }
 
+.heading-line.selected {
+  background-color: var(--background-modifier-selected);
+}
+
+.heading-line.disabled {
+  color: var(--text-faint);
+  cursor: not-allowed;
+}
+
+.heading-line.disabled input[type="checkbox"] {
+  cursor: not-allowed;
+}
+
 .heading-line input[type="checkbox"] {
   appearance: none;
   width: 16px;
