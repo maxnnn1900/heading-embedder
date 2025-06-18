@@ -82,9 +82,11 @@ class HeadingSelectModal extends Modal {
         contentEl.addClass("heading-modal");
         contentEl.createEl("h2", { text: "Выберите заголовки:" });
 
+        const listEl = contentEl.createEl("div", { cls: "heading-list" });
+
         // "Выбрать все"
-        const selectAllContainer = contentEl.createEl("div", { cls: "heading-entry" });
-        selectAllContainer.addClass("heading-line");
+        const selectAllContainer = listEl.createEl("div", { cls: "heading-entry" });
+        selectAllContainer.addClass("heading-line", "select-all");
 
         const selectAllCheckbox = selectAllContainer.createEl("input", { type: "checkbox" });
         selectAllCheckbox.classList.add("checkbox");
@@ -120,7 +122,7 @@ class HeadingSelectModal extends Modal {
 
         // Заголовки
         this.headings.forEach(({ level, text }, index) => {
-            const container = contentEl.createEl("div", { cls: "heading-line" });
+            const container = listEl.createEl("div", { cls: "heading-line" });
             container.style.marginLeft = `${(level - 1) * 20}px`;
 
             const checkbox = container.createEl("input", { type: "checkbox" });
